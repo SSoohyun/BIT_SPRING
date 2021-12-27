@@ -22,7 +22,7 @@ import lombok.extern.log4j.Log4j;
 
 @Controller
 @Log4j // 로그 출력을 위해
-@RequestMapping("/sample/*") // GET, POST 관계 X
+@RequestMapping("/sample/*") // GET, POST 관계 X (default: sample 폴더 안)
 public class SampleController {
 	@GetMapping("/ex01") // /sample/ex01을 처리
 	public String ex01(SampleDTO dto) { // 파라미터가 있으면 그대로 매핑
