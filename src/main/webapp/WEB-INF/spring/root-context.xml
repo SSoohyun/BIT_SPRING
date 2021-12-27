@@ -19,6 +19,7 @@
 		<property name="username" value="scott"></property>
 		<property name="password" value="tiger"></property>
 	</bean>
+	
 	<!-- HikariCP configuration -->
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
 		destroy-method="close">
