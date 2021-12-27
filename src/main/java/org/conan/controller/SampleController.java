@@ -6,11 +6,15 @@ import java.util.Arrays;
 import org.conan.domain.SampleDTO;
 import org.conan.domain.SampleDTOList;
 import org.conan.domain.TodoDTO;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.extern.log4j.Log4j;
 
@@ -68,5 +72,30 @@ public class SampleController {
 		log.info("dto : " + dto);
 		log.info("page : " + page);
 		return "/sample/ex04"; // 화면의 이름: sample/ex04를 찾아감
+	}
+	
+	@GetMapping("/ex05")
+	public void ex05() {
+		log.info("ex05");
+	}
+	
+	// 객체 타입: VO나 DTO 등 복합적인 데이터가 들어간 객체 타입으로 지정 가능, JSON 데이터를 만들어내는 용도 (화면 X)
+	@GetMapping("/ex06")
+	public @ResponseBody SampleDTO ex06() {
+		log.info("ex06");
+		SampleDTO dto = new SampleDTO();
+		dto.setAge(10);
+		dto.setName("conan");
+		return dto;
+	}
+	
+	// ResponseEntity 타입: Http 프로토콜의 헤더를 다루는 경우
+	@GetMapping("/ex07")
+	public ResponseEntity <String> ex07() {
+		log.info("ex07");
+		String msg = String.format("{\"name\":\"conan\"}"); // json 형태로 formatting
+		HttpHeaders header = new HttpHeaders();
+		header.add("Content-Type", "application/json;charset=UTF-8");
+		return new ResponseEntity<>(msg, header, HttpStatus.OK); // 내가 만든 msg, 헤더, 상태정보(OK: 200)
 	}
 }
