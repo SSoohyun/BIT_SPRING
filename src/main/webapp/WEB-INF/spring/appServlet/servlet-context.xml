@@ -30,4 +30,6 @@
 		<beans:property name="defaultEncoding" value="utf-8"></beans:property>
 		<beans:property name="uploadTempDir" value="file:/c:/upload"></beans:property>
 	</beans:bean>
+	
+	<context:component-scan base-package="org.conan.*"></context:component-scan>
 </beans:beans>
