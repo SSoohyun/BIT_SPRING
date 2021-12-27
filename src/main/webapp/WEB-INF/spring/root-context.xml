@@ -13,9 +13,9 @@
 
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName"
-			value="com.mysql.cj.jdbc.Driver"></property>
+			value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 		<property name="jdbcUrl"
-			value="jdbc:mysql://localhost:3306/scottdb?useSSL=false"></property>
+			value="jdbc:log4jdbc:mysql://localhost:3306/scottdb?useSSL=false"></property>
 		<property name="username" value="scott"></property>
 		<property name="password" value="tiger"></property>
 	</bean>
