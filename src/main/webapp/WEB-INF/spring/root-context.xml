@@ -8,8 +8,10 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	<context:component-scan
-		base-package="org.conan.sample"></context:component-scan>
+	<context:component-scan base-package="org.conan.sample"></context:component-scan>
+	<context:component-scan base-package="org.conan.controller"></context:component-scan>
+	<context:component-scan base-package="org.conan.mapper"></context:component-scan>
+	<context:component-scan base-package="org.conan.service"></context:component-scan>
 
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName"
@@ -32,4 +34,6 @@
 	</bean>
 	
 	<mybatis-spring:scan base-package="org.conan.mapper"/>
+	<mybatis-spring:scan base-package="org.conan.persistence"/>
+	
 </beans>
