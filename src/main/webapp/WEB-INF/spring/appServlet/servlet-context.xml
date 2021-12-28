@@ -29,4 +29,5 @@
 		<beans:property name="uploadTempDir" value="file:/c:/upload"></beans:property>
 	</beans:bean>
 	
+	<context:component-scan base-package="org.conan.controller"/>
 </beans:beans>
