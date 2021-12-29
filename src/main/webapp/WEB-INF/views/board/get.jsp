@@ -40,8 +40,11 @@
 							<label>WRITER</label>
 							<input class="form-control" name="writer" value='<c:out value="${board.writer}"/>' readonly="readonly">
 						</div>
-						<button data-oper="modify" class="btn btn-outline btn-primary" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
-						<button data-oper="list" class="btn btn-outline btn-success" onclick="location.href='/board/list'">List</button>
+						<button data-oper='modify' class="btn btn-outline btn-primary">Modify</button>
+						<button data-oper='list' class="btn btn-outline btn-success">List</button>
+						<form id="operForm" action="/board/modify" method="get">
+							<input type="hidden" id="bno" name="bno" value='<c:out value="${board.bno}"/>'>
+						</form>
 						<!-- /.table-responsive -->
 					</div>
 					<!-- /.panel-body -->
@@ -53,5 +56,22 @@
 		<!-- /.row -->
 	</div>
 	<!-- /#page-wrapper -->
+	
+	
+	
+	
+	<script type="text/javascript">
+		var operForm = $("#operForm");
+		$('button[data-oper="modify"]').on("click", function(e) {
+			operForm.attr("action", "/board/modify").submit();
+		});
+		
+		$('button[data-oper="list"]').on("click", function(e) {
+			operForm.find("#bno").remove();
+			operForm.attr("action", "/board/list");
+			operForm.submit();
+		});
+	</script>
+	
 </body>
 </html>
