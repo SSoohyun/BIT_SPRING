@@ -40,9 +40,9 @@ public class BoardController {
 		return "redirect:/board/list"; // redirect를 하지 않는 경우, 새로 고침 시 도배
 	}
 	
-	@GetMapping("/get")
-	public void get(@RequestParam("bno") Long bno, Model model) {
-		log.info("/get");
+	@GetMapping({"/get", "modify"})
+	public void get(@RequestParam("bno") Long bno, Model model) { // parameter로 bno 받음
+		log.info("/get or modify");
 		model.addAttribute("board", service.get(bno)); // key, value -> view
 	}
 	

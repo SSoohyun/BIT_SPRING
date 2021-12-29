@@ -22,7 +22,7 @@
 			<div class="col-lg-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">게시글 목록
-						<button id="regBtn" type="button" class="btn btn-success btn-xs pull-right">글쓰기</button>
+						<button id="regBtn" type="button" class="btn btn-outline btn-success btn-xs pull-right">글쓰기</button>
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
@@ -45,8 +45,8 @@
  										<td>${item.bno}</td>
  										<td><a href='/board/get?bno=<c:out value="${item.bno}"/>'>${item.title}</a></td>
  										<td>${item.writer}</td>
- 										<td><fmt:formatDate value="${item.regDate}" pattern="yyyy-MM-dd"/></td>
- 										<td><fmt:formatDate value="${item.updateDate}" pattern="yyyy-MM-dd"/></td>
+ 										<td><fmt:formatDate value="${item.regDate}" pattern="yyyy/MM/dd (E)"/></td>
+ 										<td><fmt:formatDate value="${item.updateDate}" pattern="yyyy/MM/dd (E)"/></td>
  									</tr>
  								</c:forEach>
 							</tbody>
@@ -62,8 +62,8 @@
 									</div>
 									<div class="modal-body">처리가 완료되었습니다.</div>
 									<div class="modal-footer">
-										<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-default">Save Changes</button>
+										<button type="button" class="btn btn-outline btn-info" data-dismiss="modal">Close</button>
+										<button type="button" class="btn btn-outline btn-primary">Save Changes</button>
 									</div>
 								</div>
 							</div>
@@ -89,8 +89,9 @@
 			
 			// 모달 보여주기 추가
 			checkModal(result);
+			/* history.replaceState({}, null, null); // 현재의 history entry 변경 함수 */
 			function checkModal(result) {
-				if (result == '') {
+				if (result === '' /* || history.state */) {
 					return;
 				}
 				if (parseInt(result) > 0) {
