@@ -12,4 +12,5 @@ public interface BoardMapper {
 	public BoardVO read(Long bno); // select one
 	public int delete(Long bno); // delete one
 	public int update(BoardVO board); // update one
+	public void insertSelectKey(BoardVO board); // insert 후 get primary key
 }

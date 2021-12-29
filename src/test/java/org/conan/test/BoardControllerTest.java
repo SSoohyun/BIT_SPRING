@@ -1,5 +1,6 @@
 package org.conan.test;
 
+import org.conan.domain.BoardVO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

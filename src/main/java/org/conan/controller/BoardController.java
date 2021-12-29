@@ -27,12 +27,12 @@ public class BoardController {
 	}
 	
 	@GetMapping("/register")
-	public void register() {
+	public void register() { // 화면 출력
 		
 	}
 	
 	@PostMapping("/register")
-	public String register(BoardVO board, RedirectAttributes rttr) {
+	public String register(BoardVO board, RedirectAttributes rttr) { // 입력된 항목 DB에 저장 후 리스트로
 		log.info("register : " + board);
 		service.register(board);
 		return "redirect:/board/list";

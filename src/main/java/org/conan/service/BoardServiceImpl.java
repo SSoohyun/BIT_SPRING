@@ -20,8 +20,8 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Override
 	public void register(BoardVO board) {
-//		log.info("register........." + board.getBno());
-		mapper.insert(board);
+		log.info("register........." + board);
+		mapper.insertSelectKey(board); // insert 후 게시글 번호 가져오는 메소드로 변경
 	}
 
 	@Override

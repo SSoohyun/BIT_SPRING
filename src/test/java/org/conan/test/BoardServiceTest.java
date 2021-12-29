@@ -34,11 +34,11 @@ public class BoardServiceTest {
 	@Test
 	public void testRegister() {
 		BoardVO board = new BoardVO();
-		board.setTitle("새글 새글 새글 from Service");
+		board.setTitle("새글 from Service");
 		board.setContent("새 내용 새 내용 from Service");
 		board.setWriter("newbie");
 		service.register(board);
-//		log.info("생성된 게시물의 번호 : " + board.getBno());
+		log.info("생성된 게시물의 번호 : " + board.getBno());
 	}
 	
 	@Test

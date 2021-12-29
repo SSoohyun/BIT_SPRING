@@ -25,4 +25,13 @@
 		updateDate = now()
 		where bno = #{bno}
 	</update>
+	
+	<insert id="insertSelectKey">
+		insert into tbl_board(title, content, writer)
+		values (#{title}, #{content}, #{writer})
+		<selectKey resultType="long" keyProperty="bno" order="AFTER">
+			<!-- insert를 한 후 가장 최근에 추가된 primary key 값을 가져옴 -->
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
 </mapper>
