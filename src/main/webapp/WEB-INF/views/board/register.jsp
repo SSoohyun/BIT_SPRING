@@ -37,8 +37,8 @@
 								<label>Writer</label>
 								<input class="form-control" name="writer">
 							</div>
-							<button type="submit" class="btn btn-outline-primary">Submit</button>
-							<button type="reset" class="btn btn-outline-danger">Reset</button>
+							<button type="submit" class="btn btn-primary">Submit</button>
+							<button type="reset" class="btn btn-danger">Reset</button>
 						</form>
 						<!-- /.table-responsive -->
 					</div>
