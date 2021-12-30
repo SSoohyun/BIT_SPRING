@@ -27,8 +27,7 @@
 					<!-- /.panel-heading -->
 					<div class="panel-body">
 						<table width="100%"
-							class="table table-striped table-bordered table-hover"
-							id="dataTables-example">
+							class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
 									<th># 번호</th>
@@ -43,7 +42,7 @@
  								<c:forEach var="item" items="${list}">
  									<tr>
  										<td>${item.bno}</td>
- 										<td><a href='/board/get?bno=<c:out value="${item.bno}"/>'>${item.title}</a></td>
+ 										<td><a class="move" href='<c:out value="${item.bno}"/>'>${item.title}</a></td>
  										<td>${item.writer}</td>
  										<td><fmt:formatDate value="${item.regDate}" pattern="yyyy/MM/dd (E)"/></td>
  										<td><fmt:formatDate value="${item.updateDate}" pattern="yyyy/MM/dd (E)"/></td>
@@ -52,6 +51,26 @@
 							</tbody>
 						</table>
 						<!-- /.table-responsive -->
+						<!-- Pagination -->
+						<div class="pull-right">
+							<ul class="pagination">
+								<c:if test="${pageMaker.prev}">
+									<li class="paginate_button previous"><a href="${pageMaker.startPage-1}">Previous</a></li>
+								</c:if>
+								<c:forEach var="num" begin="${pageMaker.startPage}"
+									end="${pageMaker.endPage}">
+									<li class="paginate_button ${pageMaker.cri.pageNum==num? 'active':''}"><a href="${num}">${num}</a></li>
+								</c:forEach>
+								<c:if test="${pageMaker.next}">
+									<li class="paginate_button next"><a href="${pageMaker.endPage+1}">Next</a></li>
+								</c:if>
+							</ul>
+						</div>
+						<!-- Pagination 끝 -->
+						<form id="actionForm" action="/board/list" method="get">
+							<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+							<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+						</form>
 						<!-- /.modal fade -->
 						<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
 							<div class="modal-dialog">
@@ -68,7 +87,7 @@
 								</div>
 							</div>
 						</div>
-						<!-- /.modal fade -->
+						<!-- /.modal fade 끝 -->
 					</div>
 					<!-- /.panel-body -->
 				</div>
@@ -101,9 +120,24 @@
 			}
 		});
 		
-		$("#regBtn").on("click", function() {
+		$("#regBtn").on("click", function() { // 버튼 클릭 시 register로 이동
 			self.location = "/board/register";
-		}); // 버튼 클릭 시 register로 이동
+		});
+		
+		var actionForm = $("#actionForm");
+		$(".paginate_button a").on("click", function(e) { // 페이지 이동
+			e.preventDefault();
+			console.log("click");
+			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+			actionForm.submit();
+		});
+		
+		$(".move").on("click", function(e) { // 제목에 걸린 링크가 페이지 정보를 가지고 상세 페이지(get.jsp)로 이동
+			e.preventDefault();
+			actionForm.append("<input type='hidden' name='bno' value='" + $(this).attr("href") + "'>");
+			actionForm.attr("action", "/board/get");
+			actionForm.submit();
+		});
 	</script>
 </body>
 </html>

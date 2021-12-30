@@ -3,6 +3,7 @@ package org.conan.test;
 import static org.junit.Assert.assertNotNull;
 
 import org.conan.domain.BoardVO;
+import org.conan.domain.Criteria;
 import org.conan.service.BoardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,8 @@ public class BoardServiceTest {
 	
 	@Test
 	public void testGetList() {
-		service.getList().forEach(board -> log.info(board));
+		// service.getList().forEach(board -> log.info(board));
+		service.getList(new Criteria(2, 5)).forEach(board -> log.info(board)); // 2번째 페이지 5개
 	}
 	
 	@Test
