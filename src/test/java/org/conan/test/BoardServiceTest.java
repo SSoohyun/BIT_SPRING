@@ -62,4 +62,10 @@ public class BoardServiceTest {
 		board.setTitle("제목 수정 from Service");
 		log.info("MODIFY RESULT : " + service.modify(board));
 	}
+	
+	@Test
+	public void testGetTotal() {
+		Criteria cri = new Criteria();
+		log.info("total : " + service.getTotal(cri));
+	}
 }

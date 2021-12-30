@@ -79,4 +79,11 @@ public class BoardControllerTest {
 				.param("pageNum", "2").param("amount", "3"))
 				.andReturn().getModelAndView().getModelMap());
 	}
+	
+	@Test
+	public void testGetTotal() throws Exception {
+		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/board/list")
+				.param("pageNum", "2").param("amount", "3"))
+				.andReturn().getModelAndView().getModelMap());
+	}
 }

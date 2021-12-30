@@ -13,5 +13,6 @@ public interface BoardMapper {
 	public int delete(Long bno); // delete one
 	public int update(BoardVO board); // update one
 	public void insertSelectKey(BoardVO board); // insert 후 get primary key
-	public List<BoardVO> getListWithPaging(Criteria cri); // 페이지 처리한 리스트
+	public List<BoardVO> getListWithPaging(Criteria cri); // 페이지 처리가 된 리스트
+	public int getTotalCount(Criteria cri); // 데이터 개수 반환
 }

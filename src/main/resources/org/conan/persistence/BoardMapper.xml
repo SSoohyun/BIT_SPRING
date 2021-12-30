@@ -37,8 +37,35 @@
 	
 	<select id="getListWithPaging" resultType="org.conan.domain.BoardVO">
 		<!-- 특수 기호 인식하게 하기 위해 사용 -->
-		<![CDATA[
-		select * from tbl_board limit #{pageStart}, #{amount}
-		]]>
+		<![CDATA[ select * from tbl_board ]]>
+		<include refid="criteria"></include>
+		<![CDATA[ limit #{pageStart}, #{amount} ]]>
 	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		select count(*) from tbl_board
+		<include refid="criteria"></include>
+	</select>
+	
+	<!-- 게시물 검색과 게시물의 숫자 카운트에 공통으로 사용되므로 <sql> 조각으로 분리하여 필요한 곳에서 <include>하여 사용 -->
+	<sql id="criteria">
+		<trim prefix="WHERE" prefixOverrides="OR"> <!-- prefix는 앞에, suffix는 뒤에, prefixOverrides는 필요없으면 지우기 -->
+			<foreach item="type" collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type == 'T'.toString()">
+							title like CONCAT('%', #{keyword}, '%')
+						</when>
+						<when test="type == 'C'.toString()">
+							content like CONCAT('%', #{keyword}, '%')
+						</when>
+						<when test="type == 'W'.toString()">
+							writer like CONCAT('%', #{keyword}, '%')
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+	
 </mapper>

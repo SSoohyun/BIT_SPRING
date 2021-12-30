@@ -12,4 +12,5 @@ public interface BoardService {
 	public boolean remove(Long bno);
 	public List<BoardVO> getList();
 	public List<BoardVO> getList(Criteria cri); // 페이지 처리한 리스트
+	public int getTotal(Criteria cri);
 }

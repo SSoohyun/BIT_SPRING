@@ -54,6 +54,10 @@
 							<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
 							<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
 							
+							<!-- 검색 조건 및 키워드 처리 -->
+							<input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
+							<input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'>
+							
 							<button type="submit" data-oper='modify' class="btn btn-outline btn-primary" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
 							<button type="submit" data-oper='remove' class="btn btn-outline btn-danger" onclick="location.href='/board/list'">Remove</button>
 							<button type="submit" data-oper='list' class="btn btn-outline btn-success" onclick="location.href='/board/list'">List</button>
@@ -92,12 +96,16 @@
 					// 잠시 보관
 					var pageNumTag = $("input[name='pageNum']").clone();
 					var amountTag = $("input[name='amount']").clone();
+					var typeTag = $("input[name='type']").clone();
+					var keywordTag = $("input[name='keyword']").clone();
 					
 					formObj.empty(); // 제거
 					
 					// 필요한 태그들 추가
 					formObj.append(pageNumTag);
-					formObj.append(amountTag); 
+					formObj.append(amountTag);
+					formObj.append(typeTag);
+					formObj.append(keywordTag);
 				}
 				formObj.submit();
 			});

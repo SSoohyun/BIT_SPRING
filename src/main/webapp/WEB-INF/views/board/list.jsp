@@ -21,7 +21,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">게시글 목록
+					<div class="panel-heading">게시글 목록&nbsp;(${total})
 						<button id="regBtn" type="button" class="btn btn-outline btn-success btn-xs pull-right">글쓰기</button>
 					</div>
 					<!-- /.panel-heading -->
@@ -51,6 +51,34 @@
 							</tbody>
 						</table>
 						<!-- /.table-responsive -->
+						<!-- search -->
+						<div class="row">
+							<div class="col-lg-12">
+								<form id="searchForm" action="/board/list" method="get">
+									<select name="type">
+										<option value=""
+											<c:out value="${pageMaker.cri.type == null? 'selected':''}"/>>----</option>
+										<option value="T"
+											<c:out value="${pageMaker.cri.type eq 'T'? 'selected':''}"/>>제목
+										<option value="C"
+											<c:out value="${pageMaker.cri.type eq 'C'? 'selected':''}"/>>내용</option>
+										<option value="W"
+											<c:out value="${pageMaker.cri.type eq 'W'? 'selected':''}"/>>작성자</option>
+										<option value="TC"
+											<c:out value="${pageMaker.cri.type eq 'TC'? 'selected':''}"/>>제목 || 내용</option>
+										<option value="TW"
+											<c:out value="${pageMaker.cri.type eq 'TW'? 'selected':''}"/>>제목 || 작성자</option>
+										<option value="TCW"
+											<c:out value="${pageMaker.cri.type eq 'TCW'? 'selected':''}"/>>제목 || 내용 || 작성자</option>
+									</select>
+									<input type="text" name="keyword" value='<c:out value="${pageMaker.cri.keyword}"/>'/>
+									<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}" />
+									<input type="hidden" name="amount" value="${pageMaker.cri.amount}" />
+									<button class="btn btn-info">SEARCH</button>
+								</form>
+							</div>
+						</div>
+						<!-- search 끝 -->
 						<!-- Pagination -->
 						<div class="pull-right">
 							<ul class="pagination">
@@ -70,6 +98,9 @@
 						<form id="actionForm" action="/board/list" method="get">
 							<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
 							<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+							<!-- 페이지 이동 시에도 검색 조건과 키워드 전달 -->
+							<input type="hidden" name="type" value="${pageMaker.cri.type}" />
+							<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}" />
 						</form>
 						<!-- /.modal fade -->
 						<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModallabel" aria-hidden="true">
@@ -137,6 +168,22 @@
 			actionForm.append("<input type='hidden' name='bno' value='" + $(this).attr("href") + "'>");
 			actionForm.attr("action", "/board/get");
 			actionForm.submit();
+		});
+		
+		// 검색 이벤트 처리
+		var searchForm = $("#searchForm");
+		$("#searchForm button").on("click", function(e) {
+			if (!searchForm.find("option:selected").val()) {
+				alert("검색 종류를 선택하세요");
+				return false;
+			}
+			if (!searchForm.find("input[name='keyword']").val()) {
+				alert("키워드를 입력하세요");
+				return false;
+			}
+			searchForm.find("input[name='pageNum']").val("1");
+			e.preventDefault();
+			searchForm.submit();
 		});
 	</script>
 </body>

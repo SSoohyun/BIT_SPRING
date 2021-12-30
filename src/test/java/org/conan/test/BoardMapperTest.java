@@ -74,4 +74,19 @@ public class BoardMapperTest {
 		List<BoardVO> list = mapper.getListWithPaging(cri);
 		list.forEach(board -> log.info(board));
 	}
+	
+	@Test
+	public void testTotalCount() {
+		Criteria cri = new Criteria();
+		log.info("get total count : " + mapper.getTotalCount(cri));
+	}
+	
+	@Test
+	public void testSearch() {
+		Criteria cri = new Criteria();
+		cri.setKeyword("테");
+		cri.setType("TCW");
+		List<BoardVO> list = mapper.getListWithPaging(cri);
+		list.forEach(board -> log.info(board));
+	}
 }

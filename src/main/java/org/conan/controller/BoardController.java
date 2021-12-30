@@ -33,6 +33,12 @@ public class BoardController {
 	public void list(Criteria cri, Model model) {
 		log.info("list : " + cri);
 		model.addAttribute("list", service.getList(cri));
+		
+		// getTotalCount
+		int total = service.getTotal(cri);
+		log.info("total : " + total);
+		model.addAttribute("total", total);
+		
 		model.addAttribute("pageMaker", new PageDTO(cri, 123));
 	}
 	
@@ -65,6 +71,10 @@ public class BoardController {
 		// 페이지 처리
 		rttr.addAttribute("pageNum", cri.getPageNum());
 		rttr.addAttribute("amount", cri.getAmount());
+		
+		// 검색 조건 및 키워드 처리
+		rttr.addAttribute("type", cri.getType());
+		rttr.addAttribute("keyword", cri.getKeyword());
 		return "redirect:/board/list";
 	}
 	
@@ -77,6 +87,10 @@ public class BoardController {
 		// 페이지 처리
 		rttr.addAttribute("pageNum", cri.getPageNum());
 		rttr.addAttribute("amount", cri.getAmount());
+		
+		// 검색 조건 및 키워드 처리
+		rttr.addAttribute("type", cri.getType());
+		rttr.addAttribute("keyword", cri.getKeyword());
 		return "redirect:/board/list";
 	}
 }
