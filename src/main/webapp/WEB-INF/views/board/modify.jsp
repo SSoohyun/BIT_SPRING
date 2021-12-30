@@ -50,6 +50,10 @@
 								<label>UPDATEDATE</label>
 								<input class="form-control" name="updateDate" value='<fmt:formatDate value="${board.updateDate}" pattern="yyyy/MM/dd (E)"/>' readonly="readonly">
 							</div>
+							<!-- 페이지 처리 -->
+							<input type="hidden" name="pageNum" value='<c:out value="${cri.pageNum}"/>'>
+							<input type="hidden" name="amount" value='<c:out value="${cri.amount}"/>'>
+							
 							<button type="submit" data-oper='modify' class="btn btn-outline btn-primary" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
 							<button type="submit" data-oper='remove' class="btn btn-outline btn-danger" onclick="location.href='/board/list'">Remove</button>
 							<button type="submit" data-oper='list' class="btn btn-outline btn-success" onclick="location.href='/board/list'">List</button>
@@ -83,7 +87,17 @@
 					/* self.location = "/board/list";
 					return; */
 					formObj.attr("action", "/board/list").attr("method", "get");
-					formObj.empty();
+					
+					// 페이지 처리
+					// 잠시 보관
+					var pageNumTag = $("input[name='pageNum']").clone();
+					var amountTag = $("input[name='amount']").clone();
+					
+					formObj.empty(); // 제거
+					
+					// 필요한 태그들 추가
+					formObj.append(pageNumTag);
+					formObj.append(amountTag); 
 				}
 				formObj.submit();
 			});
