@@ -44,7 +44,48 @@ var replyService = (function() {
 			}
 		});		
 	} // getList
-
-	return {add:add, getList:getList}; // add라는 이름으로 add 함수 할당, 모듈 패턴으로 외부에 노출하는 정보
+	
+	// 존재하는 댓글의 번호를 이용해서 처리
+	function remove(rno, callback, error) {
+		$.ajax({
+			type: 'delete',
+			url: '/replies/' + rno,
+			success:function(deleteResult, status, xhr) {
+				if(callback) {
+					callback(deleteResult);
+				}
+			},
+			error:function(xhr, status, er) {
+				if(error) {
+					error(er);
+				}
+			}
+		});
+	} // remove
+	
+	function update(reply, callback, error) {
+		$.ajax({
+			type: 'put',
+			url: '/replies/' + reply.rno,
+			data: JSON.stringify(reply),
+			contentType: "application/json;charset=utf-8",
+			success:function(result, status, xhr) {
+				if(callback) {
+					callback(result);
+				}
+			},
+			error:function(xhr, status, er) {
+				if(error) {
+					error(er);
+				}
+			}
+		});
+	} // update
+	
+	// 모듈 패턴으로 외부에 노출하는 정보
+	return {add:add, // add라는 이름으로 add 함수 할당
+			getList:getList,
+			remove:remove,
+			update:update};
 })();
 

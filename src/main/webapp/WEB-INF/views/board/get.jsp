@@ -89,6 +89,7 @@
 				}
 			)
 			
+			// 게시글 조회할 때마다 댓글 추가 확인
 			replyService.getList(
 				{bno: bnoValue, page:1}
 				, function(list) {
@@ -96,6 +97,27 @@
 						console.log(list[i]);
 					}
 				});
+			
+			/* 삭제 확인
+			replyService.remove(3
+				, function(count) {
+					console.log(count);
+					if(count === "success") {
+						alert("REMOVED");
+					}
+				}, function(err) {
+					alert('error occurred...');
+				});
+			*/
+			
+			// 댓글 수정
+			replyService.update({
+				rno: 4,
+				bno: bnoValue,
+				reply: "modified reply..."
+			}, function(result) {
+				alert('수정 완료');
+			});
 			
 		});
 	</script>
