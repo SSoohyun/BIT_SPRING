@@ -16,5 +16,5 @@ public interface ReplyMapper {
 	public List<ReplyVO> getListWithPaging( 
 			// MyBatis의 패러미터는 1개만 허용 but, @Param 이용 -> #{} 사용 가능
 			@Param("cri") Criteria cri,
-			@Param("bno") Long bno); 
+			@Param("bno") Long bno);
 }
