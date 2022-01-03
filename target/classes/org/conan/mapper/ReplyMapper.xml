@@ -18,7 +18,7 @@
 		update tbl_reply 
 		set reply = #{reply}, 
 		updateDate = now()
-		where rno = #{rno} 
+		where rno = #{rno}
 	</update>
 	
 	<select id="getListWithPaging" resultType="org.conan.domain.ReplyVO">

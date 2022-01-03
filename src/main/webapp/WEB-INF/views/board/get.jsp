@@ -6,7 +6,7 @@
 <%@include file="../includes/footer.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
-
+	<script src="/resources/js/reply.js"></script>
 <head>
 </head>
 <body>
@@ -76,6 +76,27 @@
 				operForm.attr("action", "/board/list");
 				operForm.submit();
 			});
+			
+			// reply module
+			console.log(replyService);
+			
+			// 조회 화면에서 호출
+			var bnoValue = '<c:out value="${board.bno}"/>';
+			replyService.add(
+				{reply : "JS TEST", replyer : "js tester", bno : bnoValue} // 댓글 데이터
+				, function(result) {
+					alert("RESULT : " + result);
+				}
+			)
+			
+			replyService.getList(
+				{bno: bnoValue, page:1}
+				, function(list) {
+					for (var i = 0; len = list.length || 0, i< len; i++) {
+						console.log(list[i]);
+					}
+				});
+			
 		});
 	</script>
 
