@@ -1,5 +1,7 @@
 package org.conan.mapper;
 
-public interface ReplyMapper {
+import org.conan.domain.ReplyVO;
 
+public interface ReplyMapper {
+	public int insert(ReplyVO vo); // 댓글 작성
 }

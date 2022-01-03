@@ -1,5 +1,8 @@
 package org.conan.test;
 
+import java.util.stream.IntStream;
+
+import org.conan.domain.ReplyVO;
 import org.conan.mapper.ReplyMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,9 +19,21 @@ import lombok.extern.log4j.Log4j;
 public class ReplyMapperTest {
 	@Setter(onMethod = @__({@Autowired}))
 	private ReplyMapper mapper;
+	private Long[] bnoArr = {7L, 8L, 10L, 11L, 12L};
 	
 	@Test
 	public void testMapper() {
 		log.info(mapper);
+	}
+	
+	@Test
+	public void testCreate() {
+		IntStream.range(1, 10).forEach(i -> {
+			ReplyVO vo = new ReplyVO();
+			vo.setBno(bnoArr[i % 5]);
+			vo.setReply("댓글 테스트 " + i);
+			vo.setReplyer("replyer" + i);
+			mapper.insert(vo);
+		});
 	}
 }
