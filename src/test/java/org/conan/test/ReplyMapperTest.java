@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j;
 public class ReplyMapperTest {
 	@Setter(onMethod = @__({@Autowired}))
 	private ReplyMapper mapper;
-	private Long[] bnoArr = {7L, 8L, 10L, 11L, 12L};
+	private Long[] bnoArr = {7L, 8L, 10L, 11L, 12L}; // 현재 존재하는 게시물 번호(bno)
 	
 	@Test
 	public void testMapper() {
@@ -28,7 +28,8 @@ public class ReplyMapperTest {
 	
 	@Test
 	public void testCreate() {
-		IntStream.range(1, 10).forEach(i -> {
+		// 1부터 10까지 (Closed는 끝 포함)
+		IntStream.rangeClosed(1, 10).forEach(i -> {
 			ReplyVO vo = new ReplyVO();
 			vo.setBno(bnoArr[i % 5]);
 			vo.setReply("댓글 테스트 " + i);
