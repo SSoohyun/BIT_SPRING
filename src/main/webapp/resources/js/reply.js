@@ -82,10 +82,24 @@ var replyService = (function() {
 		});
 	} // update
 	
+	function get(rno, callback, error) {
+		$.get("/replies/" + rno + ".json", function(result) {
+			if(callback) {
+				callback(result);
+			}
+		}).fail(function(xhr, status, err) {
+			if(error) {
+				error();
+			}
+		});
+	} // get
+	
+	
 	// 모듈 패턴으로 외부에 노출하는 정보
 	return {add:add, // add라는 이름으로 add 함수 할당
 			getList:getList,
 			remove:remove,
-			update:update};
+			update:update,
+			get:get};
 })();
 

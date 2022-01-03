@@ -98,7 +98,8 @@
 					}
 				});
 			
-			/* 삭제 확인
+			/* 
+			// 댓글 삭제
 			replyService.remove(3
 				, function(count) {
 					console.log(count);
@@ -110,6 +111,7 @@
 				});
 			*/
 			
+			/*
 			// 댓글 수정
 			replyService.update({
 				rno: 4,
@@ -117,6 +119,12 @@
 				reply: "modified reply..."
 			}, function(result) {
 				alert('수정 완료');
+			});
+			*/
+			
+			// 특정 댓글 조회
+			replyService.get(4, function(data) {
+				console.log(data);
 			});
 			
 		});
