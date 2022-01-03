@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.conan.mapper.ReplyMapper">
 	<insert id="insert">
-		insert into tbl_reply(bno, reply, replyer) values(#{bno}, #{reply}, #{replyer})
+		insert into tbl_reply(bno, reply, replyer) 
+		values(#{bno}, #{reply}, #{replyer})
 	</insert>
 	
 	<select id="read" resultType="org.conan.domain.ReplyVO">
@@ -19,4 +20,11 @@
 		updateDate = now()
 		where rno = #{rno} 
 	</update>
+	
+	<select id="getListWithPaging" resultType="org.conan.domain.ReplyVO">
+		select rno, bno, reply, replyer, replyDate, updateDate
+		from tbl_reply
+		where bno = #{bno}
+		limit #{cri.pageStart}, #{cri.amount}
+	</select>
 </mapper>
