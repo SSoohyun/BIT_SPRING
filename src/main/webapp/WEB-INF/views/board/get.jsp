@@ -6,7 +6,7 @@
 <%@include file="../includes/footer.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
-	<script src="/resources/js/reply.js"></script>
+	<script type="text/javascript" src="/resources/js/reply.js"></script>
 <head>
 </head>
 <body>
@@ -77,6 +77,7 @@
 							</li>
 						</ul>
 					</div>
+					<div class="panel-footer"></div>
 				</div>
 				<!-- /.panel -->
 
@@ -108,7 +109,8 @@
 								<button id="modalModBtn" type="button" class="btn btn-outline btn-info">Modify</button>
 								<button id="modalRemoveBtn" type="button" class="btn btn-outline btn-danger">REMOVE</button>
 								<button id="modalRegisterBtn" type="button" class="btn btn-outline btn-primary">REGISTER</button>
-								<button id="modalCloseBtn" type="button" class="btn btn-outline btn-dark">CLOSE</button>
+								<button id="modalCloseBtn" type="button" class="btn btn-outline btn-warning">CLOSE</button>
+								<!-- <button id="modalCloseBtn" type="button" class="btn btn-outline btn-warning" data-dismiss="modal">CLOSE</button> -->
 							</div>
 						</div>
 					</div>
@@ -193,7 +195,16 @@
 			function showList(page) {
 				replyService.getList(
 						{bno:bnoValue, page:page||1}
-						, function(list) {
+						, function(replyCnt, list) {
+							console.log("replyCnt: " + replyCnt);
+							console.log("list: " + list);
+							
+							if(page == 0) {
+								pageNum = Math.ceil(replyCnt/10.0); // 한 페이지에 10개씩
+								showList(pageNum);
+								return;
+							}
+							
 							var str = "";
 							if(list == null || list.length == 0) {
 								replyUL.html("");
@@ -207,6 +218,7 @@
 								str += "<p>" + list[i].reply + "</p><div></li>";
 							}
 							replyUL.html(str);
+							showReplyPage(replyCnt); // 댓글 페이지 번호 처리
 						}); // function call
 			} // showList
 			
@@ -219,6 +231,7 @@
 			var modalModBtn = $("#modalModBtn");
 			var modalRemoveBtn = $("#modalRemoveBtn");
 			var modalRegisterBtn = $("#modalRegisterBtn");
+			var modalCloseBtn = $("#modalCloseBtn");
 			
 			$("#addReplyBtn").on("click", function(e) {
 				modal.find("input").val("");
@@ -227,6 +240,103 @@
 				modalRegisterBtn.show();
 				$(".modal").modal("show");
 			});
+			
+			// 새 댓글 등록
+			modalRegisterBtn.on("click", function(e) {
+				var reply = {
+						reply:modalInputReply.val(),
+						replyer:modalInputReplyer.val(),
+						bno:bnoValue
+				};
+				replyService.add(reply, function(result) {
+					alert(result); // 댓글 등록이 정상임을 팝업으로 알림
+					modal.find("input").val(""); // 댓글 등록이 정상적으로 이뤄지면, 내용을 지움
+					modal.modal("hide"); // 모달창 닫음
+					
+					// 새로운 댓글 추가 -> page 값을 0으로 전송하고 댓글의 전체 숫자를 파악한 후에 페이지 이동
+					showList(0); // 새로 등록된 댓글이 보이도록 목록 자체 갱신
+				});
+			});
+			
+			// 특정 댓글 클릭 이벤트
+			$(".chat").on("click", "li", function(e) {
+				var rno = $(this).data("rno");
+				console.log(rno);
+				
+				modalInputReplyDate.closest("div").show(); // 댓글 작성 버튼 클릭하면 날짜 지워지기 때문에 무조건 날짜 보이게 설정
+				replyService.get(rno, function(reply) {
+					modalInputReply.val(reply.reply);
+					modalInputReplyer.val(reply.replyer);
+					modalInputReplyDate.val(replyService.displayTime(reply.replyDate)).attr("readonly", "readonly");
+					modal.data("rno", reply.rno);
+					
+					modal.find("button[id != 'modalCloseBtn']").hide();
+					modalModBtn.show();
+					modalRemoveBtn.show();
+					$(".modal").modal("show");
+				});
+			});
+			
+			// 댓글 수정
+			modalModBtn.on("click", function(e) {
+				var reply = {rno:modal.data("rno"), reply:modalInputReply.val()};
+				replyService.update(reply, function(result) {
+					alert(result);
+					modal.modal("hide");
+					
+					showList(1);
+				});
+			});
+				
+			// 댓글 삭제
+			modalRemoveBtn.on("click", function(e) {
+				var rno = modal.data("rno");
+				replyService.remove(rno, function(result) {
+					alert(result);
+					modal.modal("hide");
+					
+					showList(1);
+				});
+			});
+			
+			// 모달창 닫기
+			modalCloseBtn.on("click", function(e) {
+				modal.modal("hide");
+			});
+			
+			// 댓글의 페이지 번호 처리
+			var pageNum = 1;
+			var replyPageFooter = $(".panel-footer");
+			function showReplyPage(replyCnt) {
+				console.log("showReplyPage : " + replyCnt);
+				
+				var endNum = Math.ceil(pageNum/10.0) * 10;
+				var startNum = endNum - 9;
+				var prev = startNum != 1;
+				var next = false;
+				if(endNum * 10 >= replyCnt) {
+					endNum = Math.ceil(replyCnt/10.0);
+				}
+				if(endNum * 10 < replyCnt) {
+					next = true;
+				}
+				var str = "<ul class='pagination pull-right'>";
+				
+				if(prev) {
+					str += "<li class='page-item'><a class='page-link' href='" + (startNum - 1)  + "'>Previous</a></li>";
+				}
+				for(var i = startNum; i <= endNum; i++) {
+					var active = pageNum == i ? "active" : "";
+					str += "<li class='page-item " + active + "'><a class='page-link' href='"  +i + "'>" + i + "</a></li>";
+				}
+				if(next) {
+					str += "<li class='page-item'><a class='page-link' href='" + (endNum + 1) + "'>Next</a></li>"; 
+				}
+				str += "</ul></div>";
+				console.log(str);
+				replyPageFooter.html(str);
+	 
+			} // showReplyPage
 			
 			
 		});

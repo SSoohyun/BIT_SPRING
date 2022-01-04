@@ -2,7 +2,10 @@ package org.conan.controller;
 
 import java.util.List;
 
+import javax.print.attribute.standard.Media;
+
 import org.conan.domain.Criteria;
+import org.conan.domain.ReplyPageDTO;
 import org.conan.domain.ReplyVO;
 import org.conan.service.ReplyService;
 import org.springframework.http.HttpStatus;
@@ -46,12 +49,13 @@ public class ReplyController {
 	@GetMapping(value="/pages/{bno}/{page}",
 	produces=
 	{MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-	public ResponseEntity<List<ReplyVO>> getList(
+	public ResponseEntity<ReplyPageDTO> getList(
 			@PathVariable("page") int page, @PathVariable("bno") Long bno) {
 		log.info("get List....");
-		Criteria cri = new Criteria(page, 5); // 한 페이지에 5개
+		Criteria cri = new Criteria(page, 10); // 한 페이지에 5개
+		log.info("get Reply List bno: " + bno);
 		log.info("cri: " + cri);
-		return new ResponseEntity<> (service.getList(cri, bno), HttpStatus.OK);
+		return new ResponseEntity<> (service.getListPage(cri, bno), HttpStatus.OK);
 	}
 	
 	// 댓글 조회

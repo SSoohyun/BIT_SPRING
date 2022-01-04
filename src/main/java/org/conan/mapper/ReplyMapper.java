@@ -17,4 +17,6 @@ public interface ReplyMapper {
 			// MyBatis의 패러미터는 1개만 허용 but, @Param 이용 -> #{} 사용 가능
 			@Param("cri") Criteria cri,
 			@Param("bno") Long bno);
+	
+	public int getCountByBno(Long bno); // 댓글 수 카운트
 }

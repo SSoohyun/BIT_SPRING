@@ -68,4 +68,12 @@ public class ReplyMapperTest {
 		List<ReplyVO> replies = mapper.getListWithPaging(cri, bnoArr[0]);
 		replies.forEach(reply -> log.info(reply));
 	}
+	
+	@Test
+	public void testList2() { 
+		// 7번 게시글의 두 번째 페이지 댓글 조회 (한 페이지에 5개씩 조회하겠다고 설정)
+		Criteria cri = new Criteria(2, 5); 
+		List<ReplyVO> replies = mapper.getListWithPaging(cri, bnoArr[0]); 
+		replies.forEach(reply -> log.info(reply));
+	}
 }
