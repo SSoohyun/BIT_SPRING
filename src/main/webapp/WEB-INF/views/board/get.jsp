@@ -54,6 +54,31 @@
 					<!-- /.panel-body -->
 				</div>
 				<!-- /.panel -->
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-comments fa-fw"></i> Reply
+					</div>
+					<div class="panel-body">
+						<ul class="chat">
+							<!-- 
+								<li> 태그는 하나의 댓글
+								수정이나 삭제 시 댓글 번호(rno)가 필요하므로 'data-rno' 속성 이용
+							 -->
+							<li class="left clearfix" data-rno="12">
+								<div>
+									<div class="header">
+										<strong class="primary-font">user00</strong> 
+										<small class="pull-right text-muted">2021-05-18 13:13</small>
+									</div>
+									<p>Good Job!</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /.panel -->
+				
 			</div>
 			<!-- /.col-lg-12 -->
 		</div>
@@ -79,9 +104,10 @@
 			
 			// reply module
 			console.log(replyService);
+			var bnoValue = '<c:out value="${board.bno}"/>'; // bno 가져옴
 			
+			/* 
 			// 조회 화면에서 호출
-			var bnoValue = '<c:out value="${board.bno}"/>';
 			replyService.add(
 				{reply : "JS TEST", replyer : "js tester", bno : bnoValue} // 댓글 데이터
 				, function(result) {
@@ -98,7 +124,6 @@
 					}
 				});
 			
-			/* 
 			// 댓글 삭제
 			replyService.remove(3
 				, function(count) {
@@ -109,9 +134,7 @@
 				}, function(err) {
 					alert('error occurred...');
 				});
-			*/
 			
-			/*
 			// 댓글 수정
 			replyService.update({
 				rno: 4,
@@ -120,12 +143,12 @@
 			}, function(result) {
 				alert('수정 완료');
 			});
-			*/
 			
 			// 특정 댓글 조회
 			replyService.get(4, function(data) {
 				console.log(data);
 			});
+			*/
 			
 		});
 	</script>
