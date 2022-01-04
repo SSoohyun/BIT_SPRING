@@ -160,12 +160,14 @@
 			e.preventDefault();
 			console.log("click");
 			actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+			actionForm.attr("action", "/board/list"); // 뒤로 가기 오류
 			actionForm.submit();
 		});
 		
 		$(".move").on("click", function(e) { // 제목에 걸린 링크가 페이지 정보를 가지고 상세 페이지(get.jsp)로 이동
 			e.preventDefault(); // 동작 막음
-			actionForm.append("<input type='hidden' name='bno' value='" + $(this).attr("href") + "'>");
+			actionForm.find("#bno").remove(); // 뒤로 가기 오류
+			actionForm.append("<input id='bno' type='hidden' name='bno' value='" + $(this).attr("href") + "'>");
 			actionForm.attr("action", "/board/get");
 			actionForm.submit();
 		});

@@ -284,7 +284,7 @@
 					alert(result);
 					modal.modal("hide");
 					
-					showList(1);
+					showList(pageNum); // 수정 시 댓글이 포함된 페이지로 이동
 				});
 			});
 				
@@ -295,7 +295,7 @@
 					alert(result);
 					modal.modal("hide");
 					
-					showList(1);
+					showList(pageNum); // 삭제 시 댓글이 포함된 페이지로 이동
 				});
 			});
 			
@@ -338,6 +338,16 @@
 	 
 			} // showReplyPage
 			
+			
+			// 페이지 번호 클릭 시 새로운 댓글 출력
+			replyPageFooter.on("click", "li a", function(e) {
+				e.preventDefault();
+				console.log("page click");
+				var targetPageNum = $(this).attr("href");
+				console.log("targetNum : " + targetPageNum);
+				pageNum = targetPageNum;
+				showList(pageNum);
+			});
 			
 		});
 	</script>
