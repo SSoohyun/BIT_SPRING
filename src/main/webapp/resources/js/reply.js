@@ -31,18 +31,18 @@ var replyService = (function() {
 	
 	// 게시글 조회할 때마다 댓글 추가 확인
 	function getList(param, callback, error) {
-	var bno = param.bno;
-	var page = param.page || 1;
-	$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
-		function(data) {
-			if(callback) {
-				callback(data);
-			}
-		}).fail(function(xhr, status, err) {
-			if(error) {
-				error();	
-			}
-		});		
+		var bno = param.bno;
+		var page = param.page || 1;
+		$.getJSON("/replies/pages/" + bno + "/" + page + ".json",
+			function(data) {
+				if (callback) {
+					callback(data);
+				}
+			}).fail(function(xhr, status, err) {
+				if (error) {
+					error();
+				}
+			});
 	} // getList
 	
 	// 존재하는 댓글의 번호를 이용해서 처리
@@ -94,12 +94,35 @@ var replyService = (function() {
 		});
 	} // get
 	
+	// 시간 처리
+	function displayTime(timeValue) {
+		var today = new Date();
+		var gap = today.getTime() - timeValue;
+		var dateObj = new Date(timeValue);
+		var str = "";
+		
+		if(gap < (1000*60*60*24)) {
+			var hh = dateObj.getHours();
+			var mi = dateObj.getMinutes();
+			var ss = dateObj.getSeconds();
+			
+			return [(hh > 9 ? '' : '0') + hh, ':', (mi > 9 ? '' : '0') + mi, ':', (ss > 9 ? '' : '0') + ss].join('');
+			
+		} else {
+			var yy = dateObj.getFullYear();
+			var mm = dataObj.getMonth() + 1;
+			var dd = dateObj.getDate();
+			
+			return [yy, '/', (mm > 9 ? '' : '0') + mm, '/', (dd > 9 ? '' : '0') + dd].join('');
+		} 
+	} // displayTime
 	
 	// 모듈 패턴으로 외부에 노출하는 정보
 	return {add:add, // add라는 이름으로 add 함수 할당
 			getList:getList,
 			remove:remove,
 			update:update,
-			get:get};
+			get:get,
+			displayTime:displayTime};
 })();
 

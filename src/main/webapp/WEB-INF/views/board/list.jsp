@@ -139,9 +139,9 @@
 			
 			// 모달 보여주기 추가
 			checkModal(result);
-			/* history.replaceState({}, null, null); // 현재의 history entry 변경 함수 */
+			history.replaceState({}, null, null); // 현재의 history entry 변경 함수
 			function checkModal(result) {
-				if (result === '' /* || history.state */) {
+				if (result === '' || history.state) {
 					return;
 				}
 				if (parseInt(result) > 0) {
