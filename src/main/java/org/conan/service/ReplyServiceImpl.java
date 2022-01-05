@@ -6,8 +6,10 @@ import org.conan.domain.Criteria;
 import org.conan.domain.ReplyPageDTO;
 import org.conan.domain.ReplyVO;
 import org.conan.mapper.ReplyMapper;
+import org.conan.persistence.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -18,9 +20,14 @@ public class ReplyServiceImpl implements ReplyService {
 	@Setter(onMethod_ = @Autowired)
 	private ReplyMapper mapper;
 	
+	@Setter(onMethod_ = @Autowired)
+	private BoardMapper boardMapper;
+	
+	@Transactional
 	@Override
 	public int register(ReplyVO vo) { // 댓글 등록
 		log.info("register..." + vo);
+		boardMapper.updateReplyCnt(vo.getBno(), 1); // 댓글 수 업데이트
 		return mapper.insert(vo);
 	}
 
@@ -35,10 +42,13 @@ public class ReplyServiceImpl implements ReplyService {
 		log.info("modify..." + vo);
 		return mapper.update(vo);
 	}
-
+	
+	@Transactional
 	@Override
 	public int remove(Long rno) { // 댓글 삭제
 		log.info("remove..." + rno);
+		ReplyVO vo = mapper.read(rno);
+		boardMapper.updateReplyCnt(vo.getBno(), -1); // 댓글 수 업데이트
 		return mapper.delete(rno);
 	}
 
