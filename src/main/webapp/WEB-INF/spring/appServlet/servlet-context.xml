@@ -21,13 +21,17 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<!-- <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<beans:property name="maxUploadSize" value="200000000"></beans:property>
 		<beans:property name="maxInMemorySize" value="200000000"></beans:property>
 		<beans:property name="maxUploadSizePerFile" value="4000000"></beans:property>
 		<beans:property name="defaultEncoding" value="utf-8"></beans:property>
 		<beans:property name="uploadTempDir" value="file:/c:/upload"></beans:property>
-	</beans:bean>
+	</beans:bean> -->
+	
+	<!-- MultipartResolver라는 객체의 빈 등록 -->
+	<beans:bean id="multipartResolver" 
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 	
 	<context:component-scan base-package="org.conan.controller"/>
 </beans:beans>
