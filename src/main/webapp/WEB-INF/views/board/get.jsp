@@ -104,7 +104,6 @@
 				</div>
 				<!-- /.panel -->
 
-
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<i class="fa fa-comments fa-fw"></i> File Attach
@@ -122,8 +121,6 @@
 					</div>
 					<div class="panel-footer"></div>
 				</div>
-				
-				
 				
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -445,7 +442,7 @@
 					if(!obj.fileType) { // 이미지가 아닌 경우
 						
 						var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
-						str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
+						str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.fileType+"'><div>";
 						str += "<img src='/resources/images/attach.png'>";
 						str += "</div></li>";
 					} else {
@@ -456,7 +453,7 @@
 						console.log("originPath1 : " + originPath);
 						originPath = originPath.replace(new RegExp(/\\/g), "/"); // \를 /로 통일
 						console.log("originPath2 : " + originPath);
-						str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
+						str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.fileType+"'><div>";
 						str += "<a href=\"javascript:showImage(\'" + originPath + "\')\"><img src='/display?fileName=" + fileCallPath + "'></a>";
 						str += "</div></li>";
 					}

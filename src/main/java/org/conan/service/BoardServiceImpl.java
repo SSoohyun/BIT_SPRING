@@ -42,11 +42,22 @@ public class BoardServiceImpl implements BoardService {
 		log.info("get..." + bno);
 		return mapper.read(bno);
 	}
-
+	
+	@Transactional
 	@Override
 	public boolean modify(BoardVO board) {
 		log.info("modify..." + board);
-		return mapper.update(board) == 1;
+		
+		attachMapper.deleteAll(board.getBno()); // db에서 모든 첨부파일 정보 삭제
+		boolean modifyResult = mapper.update(board) == 1; // board 테이블 정보 수정
+		
+		if(modifyResult && board.getAttachList() != null && board.getAttachList().size() > 0) {
+			board.getAttachList().forEach(attach ->{
+				attach.setBno(board.getBno());
+				attachMapper.insert(attach); // db에 첨부파일 정보 저장
+			});
+		}
+		return modifyResult;
 	}
 	
 	@Transactional

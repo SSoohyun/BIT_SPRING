@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.conan.mapper.BoardAttachMapper">
 	<insert id="insert">
-		insert into tbl_attach values(#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno});
+		insert into tbl_attach values(#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno})
 	</insert>
 	
 	<delete id="delete">
@@ -16,4 +16,9 @@
 	<delete id="deleteAll">
 		delete from tbl_attach where bno = #{bno}
 	</delete>
+	
+	<select id="getOldFiles" resultType="org.conan.domain.BoardAttachVO">
+		select * from tbl_attach
+		where uploadpath = date_format(date_sub(now(), interval 1 day), '%Y\%m\%d')
+	</select>
 </mapper>
