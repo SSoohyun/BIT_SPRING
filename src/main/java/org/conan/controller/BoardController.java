@@ -50,6 +50,12 @@ public class BoardController {
 	@PostMapping("/register") // 게시글 저장
 	public String register(BoardVO board, RedirectAttributes rttr) { // 입력된 항목 DB에 저장 후 list로 이동
 		log.info("register : " + board);
+		
+		// 데이터(첨부파일) 받았는지 확인
+		if(board.getAttachList() != null) {
+			board.getAttachList().forEach(attach -> log.info(attach));
+		}
+		
 		service.register(board);
 		rttr.addFlashAttribute("result", board.getBno()); // 새로 삽입된 번호
 //		return "/board/list";

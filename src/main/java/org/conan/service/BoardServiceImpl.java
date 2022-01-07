@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.conan.domain.BoardVO;
 import org.conan.domain.Criteria;
+import org.conan.mapper.BoardAttachMapper;
 import org.conan.persistence.BoardMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -16,11 +18,22 @@ import lombok.extern.log4j.Log4j;
 public class BoardServiceImpl implements BoardService {
 //	@Setter(onMethod_=@Autowired) // 빈 객체 생성, 모든 필드에 접근자와 설정자가 자동으로 생성
 	private BoardMapper mapper;
+	private BoardAttachMapper attachMapper;
 	
+	@Transactional
 	@Override
 	public void register(BoardVO board) {
-		log.info("register........." + board);
+		log.info("register........." + board.getBno());
 		mapper.insertSelectKey(board); // insert 후 게시글 번호 가져오는 메소드로 변경
+		
+		if(board.getAttachList() == null || board.getAttachList().size() <= 0) { // 첨부파일 있는지 확인
+			return;
+		}
+		// 첨부파일 있으면 db에 insert
+		board.getAttachList().forEach(attach->{
+			attach.setBno(board.getBno());
+			attachMapper.insert(attach);
+		});
 	}
 
 	@Override
