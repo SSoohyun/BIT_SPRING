@@ -8,6 +8,55 @@
 <html lang="en">
 	<script type="text/javascript" src="/resources/js/reply.js"></script>
 <head>
+<style>
+.uploadResult {
+	width: 100%;
+	background-color: #ddd;
+}
+
+.uploadResult ul {
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.uploadResult ul li {
+	list-style: none;
+	padding: 10px;
+}
+
+.uploadResult ul li img {
+	width: 20px;
+}
+
+.uploadResult ul li span {
+	color: white;
+}
+
+.bigPictureWrapper {
+	position: absolute;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	z-index: 100;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+.bigPicture {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.bigPicture img {
+	width: 400px;
+</style>
 </head>
 <body>
 	<div id="page-wrapper">
@@ -55,6 +104,27 @@
 				</div>
 				<!-- /.panel -->
 
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-comments fa-fw"></i> File Attach
+					</div>
+					<div class="panel-body">
+						<!-- 첨부파일 띄우기 -->
+						<div class="uploadResult">
+							<ul></ul>
+						</div>
+
+						<!-- 이미지 크게 보이게 -->
+						<div class="bigPictureWrapper">
+							<div class="bigPicture"></div>
+						</div>
+					</div>
+					<div class="panel-footer"></div>
+				</div>
+				
+				
+				
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<i class="fa fa-comments fa-fw"></i> Reply
@@ -128,6 +198,23 @@
 
 
 	<script type="text/javascript">
+		// 썸네일 클릭 이벤트
+		function showImage(fileCallPath) {
+			//alert(fileCallPath);
+			$(".bigPictureWrapper").css("display", "flex").show();
+			$(".bigPicture")
+			.html("<img src='/display?fileName=" + encodeURI(fileCallPath) + "'>")
+			.animate({width: '100%', height: '100%'}, 1000);
+			
+			// 이미지를 다시 클릭하면 사라지도록 처리
+			$(".bigPictureWrapper").on("click", function(e) {
+				$(".bigPicture").animate({width: '0%', height: '0%'}, 1000);
+				setTimeout(function() {
+					$('.bigPictureWrapper').hide();
+				}, 1000);
+			}); // bigPictureWrapper click
+		}
+	
 		$(document).ready(function() {
 			var operForm = $("#operForm");
 			$('button[data-oper="modify"]').on("click", function(e) {
@@ -349,6 +436,33 @@
 				showList(pageNum);
 			});
 			
+			// BoardController의 getAttachList로 bno 보내서 arr(첨부파일 리스트) 받아서 출력 
+			var bno = '<c:out value="${board.bno}"/>';
+			$.getJSON("/board/getAttachList", {bno:bnoValue}, function(arr) { // url, data, success
+				console.log(arr);
+				var str = "";
+				$(arr).each(function(i, obj) {
+					if(!obj.fileType) { // 이미지가 아닌 경우
+						
+						var fileCallPath = encodeURIComponent(obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName);
+						str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
+						str += "<img src='/resources/images/attach.png'>";
+						str += "</div></li>";
+					} else {
+						
+						// 썸네일 나오게 처리
+						var fileCallPath = encodeURIComponent(obj.uploadPath +  "/s_" + obj.uuid + "_" + obj.fileName);
+						var originPath = obj.uploadPath + "/" + obj.uuid + "_" + obj.fileName;
+						console.log("originPath1 : " + originPath);
+						originPath = originPath.replace(new RegExp(/\\/g), "/"); // \를 /로 통일
+						console.log("originPath2 : " + originPath);
+						str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'><div>";
+						str += "<a href=\"javascript:showImage(\'" + originPath + "\')\"><img src='/display?fileName=" + fileCallPath + "'></a>";
+						str += "</div></li>";
+					}
+				});
+				$(".uploadResult ul").html(str);
+			}); // getJSON
 		});
 	</script>
 

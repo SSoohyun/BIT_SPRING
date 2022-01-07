@@ -2,6 +2,7 @@ package org.conan.service;
 
 import java.util.List;
 
+import org.conan.domain.BoardAttachVO;
 import org.conan.domain.BoardVO;
 import org.conan.domain.Criteria;
 import org.conan.mapper.BoardAttachMapper;
@@ -47,10 +48,12 @@ public class BoardServiceImpl implements BoardService {
 		log.info("modify..." + board);
 		return mapper.update(board) == 1;
 	}
-
+	
+	@Transactional
 	@Override
 	public boolean remove(Long bno) {
 		log.info("remove..." + bno);
+		attachMapper.deleteAll(bno); // 파일 정보 삭제도 함께 이루어져야 함
 		return mapper.delete(bno) == 1;
 	}
 
@@ -70,5 +73,11 @@ public class BoardServiceImpl implements BoardService {
 	public int getTotal(Criteria cri) {
 		log.info("get Total count");
 		return mapper.getTotalCount(cri);
+	}
+
+	@Override
+	public List<BoardAttachVO> getAttachList(Long bno) {
+		log.info("get Attach list by bno" + bno);
+		return attachMapper.findByBno(bno);
 	}
 }
