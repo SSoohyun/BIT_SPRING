@@ -54,9 +54,11 @@
 	<mybatis-spring:scan base-package="org.conan.persistence"/>
 	
 	<!-- spring security -->
+	<!--  
 	<security:http>
 		<security:form-login/>
 	</security:http>
 	<security:authentication-manager></security:authentication-manager>
+	-->
 	
 </beans>

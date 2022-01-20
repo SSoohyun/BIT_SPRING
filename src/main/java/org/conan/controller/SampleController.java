@@ -115,4 +115,24 @@ public class SampleController {
 			log.info("size : " + file.getSize());
 		}
 	}
+	
+	// security
+	
+	// 로그인을 하지 않은 사용자도 접근 가능한 URI
+	@GetMapping("/all")
+	public void doAll() {
+		log.info("누구나 접근 가능");
+	}
+
+	// 로그인한 사용자들만 접근할 수 있는 URI
+	@GetMapping("/member")
+	public void doMember() {
+		log.info("로그인한 회원들만 접근 가능");
+	}
+
+	// 로그인한 사용자들 중 관리자 권한을 가진 사용자만 접근할 수 있는 URI
+	@GetMapping("/admin")
+	public void doAdmin() {
+		log.info("관리자들만 접근 가능");
+	}
 }

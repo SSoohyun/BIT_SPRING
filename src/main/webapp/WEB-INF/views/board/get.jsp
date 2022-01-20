@@ -1,204 +1,204 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-   pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <title>Get</title>
 <style>
 .uploadResult {
-   width: 100%;
-   background-color: gray;
+	width: 100%;
+	background-color: gray;
 }
 
 .uploadResult ul {
-   display: flex;
-   flex-flow: row;
-   justify-content: center;
-   align-items: center;
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
 }
 
 .uploadResult ul li {
-   list-style: none;
-   padding: 10px;
-   align-content: center;
-   text-align: center;
+	list-style: none;
+	padding: 10px;
+	align-content: center;
+	text-align: center;
 }
 
 .uploadResult ul li img {
-   width: 100px;
+	width: 100px;
 }
 
 .uploadResult ul li span {
-   color: white;
+	color: white;
 }
 
 .bigPictureWrapper {
-   position: absolute;
-   display: none;
-   justify-content: center;
-   align-items: center;
-   top: 0%;
-   width: 100%;
-   height: 100%;
-   background-color: gray;
-   z-index: 100;
-   background: rgba(255, 255, 255, 0.5);
+	position: absolute;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	top: 0%;
+	width: 100%;
+	height: 100%;
+	background-color: gray;
+	z-index: 100;
+	background: rgba(255, 255, 255, 0.5);
 }
 
 .bigPicture {
-   position: relative;
-   display: flex;
-   justify-content: center;
-   align-items: center;
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .bigPicture img {
-   width: 600px;
+	width: 600px;
 }
 </style>
 <%@include file="../includes/header.jsp"%>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <!-- 푸터에 있음 -->
 <div id="page-wrapper">
-   <div class="row">
-      <div class="col-lg-12">
-         <h1 class="page-header">BOARD GET</h1>
-      </div>
-      <!-- /.col-lg-12 -->
-   </div>
-   <!-- /.row -->
-   <div class="row">
-      <div class="col-lg-12">
-         <div class="panel panel-default">
-            <div class="panel-heading">Board Get (게시글 조회)</div>
-            <!-- /.panel-heading -->
-            <div class="panel-body">
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">BOARD GET</h1>
+		</div>
+		<!-- /.col-lg-12 -->
+	</div>
+	<!-- /.row -->
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">Board Get (게시글 조회)</div>
+				<!-- /.panel-heading -->
+				<div class="panel-body">
 
-               <div class="form-group">
-                  <label>Bno</label><input class="form-control" name="bno"
-                     value='<c:out value="${board.bno}"/>' readonly="readonly">
-               </div>
-               <div class="form-group">
-                  <label>Title</label><input class="form-control" name="title"
-                     value='<c:out value="${board.title}"/>' readonly="readonly">
-                  <%-- <label>Title</label><input class="form-control" name="title" value="${board.title}"/> --%>
-               </div>
-               <div class="form-group">
-                  <label>Content</label>
-                  <textarea class="form-control" name="content" rows="3"
-                     readonly="readonly">${board.content}</textarea>
-               </div>
-               <div class="form-group">
-                  <label>Writer</label><input class="form-control" name="writer"
-                     value='<c:out value="${board.writer}"/>' readonly="readonly">
-               </div>
-               
-                  <div class='uploadResult'>
-                     <ul>
-                     </ul>
-                  </div>
-               
+					<div class="form-group">
+						<label>Bno</label><input class="form-control" name="bno"
+							value='<c:out value="${board.bno}"/>' readonly="readonly">
+					</div>
+					<div class="form-group">
+						<label>Title</label><input class="form-control" name="title"
+							value='<c:out value="${board.title}"/>' readonly="readonly">
+						<%-- <label>Title</label><input class="form-control" name="title" value="${board.title}"/> --%>
+					</div>
+					<div class="form-group">
+						<label>Content</label>
+						<textarea class="form-control" name="content" rows="3"
+							readonly="readonly">${board.content}</textarea>
+					</div>
+					<div class="form-group">
+						<label>Writer</label><input class="form-control" name="writer"
+							value='<c:out value="${board.writer}"/>' readonly="readonly">
+					</div>
 
-               <%-- <button data-oper="modify" class="btn btn-default" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
+					<div class='uploadResult'>
+						<ul>
+						</ul>
+					</div>
+
+
+					<%-- <button data-oper="modify" class="btn btn-default" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
                <button data-oper="list" class="btn btn-default" onclick="location.href='/board/list'">List</button> --%>
 
 
-               <!-- <button data-oper='modify' class="btn btn-outline btn-primary">Modify</button>
+					<!-- <button data-oper='modify' class="btn btn-outline btn-primary">Modify</button>
                   <button data-oper='list' class="btn btn-outline btn-success">List</button> -->
-               <form id='operForm' action="/board/modify" method="get">
-                  <input type="hidden" id="bno" name="bno" value="${board.bno}">
-                  <input type="hidden" name="pageNum" value="${cri.pageNum}">
-                  <input type="hidden" name="amount" value="${cri.amount}">
-                  <input type="hidden" name="type" value="${cri.type}"> <input
-                     type="hidden" name="keyword" value="${cri.keyword}">
-               
-                  <button data-oper="modify"
-                     class="btn btn-outline btn-primary btn-sm">Modify</button>
-                  <button data-oper="list" class="btn btn-outline btn-info btn-sm">List</button>
-               </form>
-            <!-- /.panel-body -->
-         </div>
+					<form id='operForm' action="/board/modify" method="get">
+						<input type="hidden" id="bno" name="bno" value="${board.bno}">
+						<input type="hidden" name="pageNum" value="${cri.pageNum}">
+						<input type="hidden" name="amount" value="${cri.amount}">
+						<input type="hidden" name="type" value="${cri.type}"> <input
+							type="hidden" name="keyword" value="${cri.keyword}">
 
-         <!-- /.panel -->
-      </div>
-               <!--첨부파일 -->
-               <div class='bigPictureWrapper'>
-                  <div class='bigPicture'></div>
-               </div>
-            </div>
+						<button data-oper="modify"
+							class="btn btn-outline btn-primary btn-sm">Modify</button>
+						<button data-oper="list" class="btn btn-outline btn-info btn-sm">List</button>
+					</form>
+					<!-- /.panel-body -->
+				</div>
 
-      <!-- /.col-lg-12 -->
-      <div class="col-lg-12">
-         <div class="panel panel-default">
-            <div class="panel-heading">
-               <i class="fa fa-comments fa-fw"></i>Reply
-               <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New
-                  Reply</button>
-            </div>
-            <!-- /.panel-heading -->
+				<!-- /.panel -->
+			</div>
+			<!--첨부파일 -->
+			<div class='bigPictureWrapper'>
+				<div class='bigPicture'></div>
+			</div>
+		</div>
 
-            <div class="panel-body">
-               <ul class="chat">
-                  <!-- start reply -->
-                  <li class="left clearfix" data-rno='12'>
-                     <div>
-                        <div class="header">
-                           <strong class="primary-font">user00</strong> <small
-                              class="pull-right text-muted">2021-05-18 13:13</small>
-                        </div>
-                        <p>Good job!</p>
-                     </div>
-                  </li>
-                  <!--  end reply -->
-               </ul>
-               <!--  ./end ul -->
-            </div>
-            <!-- /.row -->
-            <div class="panel-footer">
-               <div></div>
-            </div>
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-               aria-labelledby="myModalLabel" aria-hidden="true">
-               <div class="modal-dialog">
-                  <div class="modal-content">
-                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"
-                           aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
-                     </div>
-                     <div class="modal-body">
-                        <div class="form-group">
-                           <label>Reply</label> <input class="form-control" name="reply"
-                              value="New Reply!!!">
-                        </div>
-                        <div class="form-group">
-                           <label>Replyer</label> <input class="form-control"
-                              name="replyer" value="replyer">
-                        </div>
-                        <div class="form-group">
-                           <label>Reply date</label> <input class="form-control"
-                              name="replyDate" value="">
-                        </div>
-                     </div>
-                     <div class="modal-footer">
-                        <button type="button" id="modalModBtn" class="btn btn-warning">Modify</button>
-                        <button type="button" id="modalRemoveBtn" class="btn btn-danger">Remove</button>
-                        <button type="button" id="modalRegisterBtn"
-                           class="btn btn-primary">Register</button>
-                        <button type="button" id="modalCloseBtn" class="btn btn-default"
-                           data-dismiss="modal">Close</button>
-                     </div>
-                  </div>
-                  <!-- /.modal-content -->
-               </div>
-               <!-- /.modal-dialog -->
-            </div>
-            <!-- /.modal -->
-            <!-- /#page-wrapper -->
+		<!-- /.col-lg-12 -->
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fa fa-comments fa-fw"></i>Reply
+					<button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New
+						Reply</button>
+				</div>
+				<!-- /.panel-heading -->
 
-            <script type="text/javascript" src="/resources/js/reply.js"></script>
-            <script type="text/javascript">
+				<div class="panel-body">
+					<ul class="chat">
+						<!-- start reply -->
+						<li class="left clearfix" data-rno='12'>
+							<div>
+								<div class="header">
+									<strong class="primary-font">user00</strong> <small
+										class="pull-right text-muted">2021-05-18 13:13</small>
+								</div>
+								<p>Good job!</p>
+							</div>
+						</li>
+						<!--  end reply -->
+					</ul>
+					<!--  ./end ul -->
+				</div>
+				<!-- /.row -->
+				<div class="panel-footer">
+					<div></div>
+				</div>
+				<!-- Modal -->
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">&times;</button>
+								<h4 class="modal-title" id="myModalLabel">REPLY MODAL</h4>
+							</div>
+							<div class="modal-body">
+								<div class="form-group">
+									<label>Reply</label> <input class="form-control" name="reply"
+										value="New Reply!!!">
+								</div>
+								<div class="form-group">
+									<label>Replyer</label> <input class="form-control"
+										name="replyer" value="replyer">
+								</div>
+								<div class="form-group">
+									<label>Reply date</label> <input class="form-control"
+										name="replyDate" value="">
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" id="modalModBtn" class="btn btn-warning">Modify</button>
+								<button type="button" id="modalRemoveBtn" class="btn btn-danger">Remove</button>
+								<button type="button" id="modalRegisterBtn"
+									class="btn btn-primary">Register</button>
+								<button type="button" id="modalCloseBtn" class="btn btn-default"
+									data-dismiss="modal">Close</button>
+							</div>
+						</div>
+						<!-- /.modal-content -->
+					</div>
+					<!-- /.modal-dialog -->
+				</div>
+				<!-- /.modal -->
+				<!-- /#page-wrapper -->
+
+				<script type="text/javascript" src="/resources/js/reply.js"></script>
+				<script type="text/javascript">
             
 $(document).ready(function() {//즉시 실행 함수
    var operForm = $("#operForm");
@@ -472,5 +472,5 @@ $(document).ready(function() {//즉시 실행 함수
 });
 </script>
 <%@include file="../includes/footer.jsp"%>
-            </body>
+</body>
 </html>
