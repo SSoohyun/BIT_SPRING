@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.conan.mapper.MemberMapper">
+	<resultMap type="org.conan.domain.MemberVO" id="memberMap">
+		<!-- property: VO, column: db 필드명 -->
+		<id property="userId" column="userid"/>
+		<result property="userId" column="userid"/>
+		<result property="userPwd" column="userpwd"/>
+		<result property="userName" column="username"/>
+		<result property="regDate" column="regdate"/>
+		<result property="updateDate" column="updatedate"/>
+		<collection property="authList" resultMap="authMap"></collection>
+	</resultMap>
+	
+	<resultMap type="org.conan.domain.AuthVO" id="authMap">
+		<result property="userId" column="userid"/>
+		<result property="auth" column="auth"/>
+	</resultMap>
+	
+	<select id="read" resultMap="memberMap">
+		select mem.userid, userpwd, username, enabled, regdate, updatedate, auth
+		from tbl_member mem left join tbl_member_auth auth
+		on mem.userid = auth.userid
+		where mem.userid = #{userId}
+	</select>
+</mapper>

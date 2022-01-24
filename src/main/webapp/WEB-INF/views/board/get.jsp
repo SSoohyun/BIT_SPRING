@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html lang="en">
 <title>Get</title>
@@ -111,9 +112,13 @@
 						<input type="hidden" name="amount" value="${cri.amount}">
 						<input type="hidden" name="type" value="${cri.type}"> <input
 							type="hidden" name="keyword" value="${cri.keyword}">
-
-						<button data-oper="modify"
-							class="btn btn-outline btn-primary btn-sm">Modify</button>
+						
+						<sec:authentication property="principal" var="pinfo"/>
+						<sec:authorize access="isAuthenticated()">
+							<c:if test="${pinfo.username eq board.writer}">
+							<button data-oper="modify" class="btn btn-outline btn-primary btn-sm">Modify</button>
+							</c:if>
+						</sec:authorize>
 						<button data-oper="list" class="btn btn-outline btn-info btn-sm">List</button>
 					</form>
 					<!-- /.panel-body -->
@@ -132,8 +137,9 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<i class="fa fa-comments fa-fw"></i>Reply
-					<button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New
-						Reply</button>
+					<sec:authorize access="isAuthenticated()">
+						<button id="addReplyBtn" class="btn btn-primary btn-xs pull-right">New Reply</button>
+					</sec:authorize>
 				</div>
 				<!-- /.panel-heading -->
 
@@ -406,14 +412,31 @@ $(document).ready(function() {//즉시 실행 함수
    var modalRemoveBtn = $("#modalRemoveBtn");
    var modalRegisterBtn = $("#modalRegisterBtn");
    
+   
+   var replyer = null;
+   <sec:authorize access="isAuthenticated()">
+   replyer = '<sec:authentication property="principal.username"/>';
+   </sec:authorize>
+   var csrfHeaderName = "${_csrf.headerName}";
+   var csrfTokenValue = "${_csrf.token}";
+    
+   
    $("#addReplyBtn").on("click", function(e) {
       modal.find("input").val("");
+      modal.find("input[name='replyer']").val(replyer);
       modalInputReplyDate.closest("div").hide();
       modal.find("button[id!='modalCloseBtn']").hide();
       
       modalRegisterBtn.show();
       $(".modal").modal("show");
+      showList(1);
    });
+   
+   // ajax spring security header
+   $(document).ajaxSend(function(e, xhr, options) {
+	   xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+   });
+   
    modalRegisterBtn.on("click", function(e) {
       var reply ={
             reply: modalInputReply.val(),

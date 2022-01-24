@@ -9,6 +9,8 @@ import org.conan.domain.TodoDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -134,5 +136,17 @@ public class SampleController {
 	@GetMapping("/admin")
 	public void doAdmin() {
 		log.info("관리자들만 접근 가능");
+	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_MEMBER')")
+	@GetMapping("/annoMember")
+	public void doMember2() {
+		log.info("어노테이션 멤버로 로그인");
+	}
+	
+	@Secured({"ROLE_ADMIN"})
+	@GetMapping("/annoAdmin")
+	public void doAdmin2() {
+		log.info("어노테이션 어드민만");
 	}
 }

@@ -13,6 +13,7 @@ import org.conan.service.BoardService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -74,11 +75,13 @@ public class BoardController {
 		model.addAttribute("pageMaker", new PageDTO(cri, total));
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/register")
 	public void register() { // 화면 출력
 		
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@PostMapping("/register") // 게시글 저장
 	public String register(BoardVO board, RedirectAttributes rttr) { // 입력된 항목 DB에 저장 후 list로 이동
 		log.info("register : " + board);
@@ -100,6 +103,7 @@ public class BoardController {
 		model.addAttribute("board", service.get(bno)); // key, value -> view
 	}
 	
+	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/modify")
 	public String get(BoardVO board, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 		log.info("modify : " + board);
@@ -116,8 +120,9 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/remove")
-	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
+	public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, String writer) {
 		log.info("remove..." + bno);
 		
 		List<BoardAttachVO> attachList = service.getAttachList(bno); // 첨부파일 목록 가져옴

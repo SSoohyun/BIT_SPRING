@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../includes/header.jsp"%>
 <%@include file="../includes/footer.jsp"%>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -61,11 +61,14 @@
 									placeholder="내용을 입력하세요"></textarea>
 							</div>
 							<div class="form-group">
-								<label>WRITER</label> <input class="form-control" name="writer"
+								<label>WRITER</label> <input class="form-control" name="writer" value='<sec:authentication property="principal.username"/>' readonly="readonly"
 									placeholder="작성자를 입력하세요">
 							</div>
+
 							<button type="submit" class="btn btn-outline btn-primary">Submit</button>
 							<button type="reset" class="btn btn-outline btn-danger">Reset</button>
+							
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 						</form>
 						<!-- /.table-responsive -->
 					</div>
@@ -97,8 +100,7 @@
 
 	</div>
 	<!-- /#page-wrapper -->
-
-
+	
 	<script>
 		$(document).ready(function(e) {
 			var formObj = $("form[role='form']");
@@ -139,6 +141,8 @@
 			
 			// <input type="file"> 내용이 변경되는 것을 감지해서 무조건 업로드 처리
 			//$(document).on('change', "input[type='file']", function(e) {
+			var csrfHeaderName = "${_csrf.headerName}";
+			var csrfTokenValue = "${_csrf.token}";
 			$("input[type='file']").change(function(e) {
 				// 파일 업로드
 				// ajax 이용하는 경우에는 FormData 객체 이용 (form 태그와 같은 역할)
@@ -163,6 +167,9 @@
 					data : formData, // 전달할 데이터
 					type : 'POST',
 					dataType: 'json', // 데이터 타입: json
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+					},
 					success : function (result) {
 						alert('Uploaded');
 						console.log(result);
@@ -218,6 +225,9 @@
 					data: {fileName: targetFile, type: type},
 					dataType: 'text',
 					type: 'post',
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+					},
 					success: function(result) {
 						alert(result);
 						targetLi.remove(); // li 삭제

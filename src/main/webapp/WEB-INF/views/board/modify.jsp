@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <%@include file="../includes/header.jsp" %>
 <%@include file="../includes/footer.jsp" %>
 <!DOCTYPE html>
@@ -83,6 +84,22 @@
 							<input type="hidden" name="type" value='<c:out value="${cri.type}"/>'>
 							<input type="hidden" name="keyword" value='<c:out value="${cri.keyword}"/>'>
 							
+							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+							<!-- 
+							<sec:authentication property="principal" var="pinfo"/>
+								<sec:authorize access="isAuthenticated()">
+								<c:if test="${pinfo.username eq board.writer}">
+									<button type="submit" data-oper='modify' class="btn btn-outline btn-primary" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
+								</c:if>
+							</sec:authorize>
+							
+							<sec:authentication property="principal" var="pinfo"/>
+								<sec:authorize access="isAuthenticated()">
+								<c:if test="${pinfo.username eq board.writer}">
+									<button type="submit" data-oper='remove' class="btn btn-outline btn-danger" onclick="location.href='/board/list'">Remove</button>
+								</c:if>
+							</sec:authorize>
+							 -->
 							<button type="submit" data-oper='modify' class="btn btn-outline btn-primary" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
 							<button type="submit" data-oper='remove' class="btn btn-outline btn-danger" onclick="location.href='/board/list'">Remove</button>
 							<button type="submit" data-oper='list' class="btn btn-outline btn-success" onclick="location.href='/board/list'">List</button>
@@ -236,6 +253,8 @@
 			
 			// <input type="file"> 내용이 변경되는 것을 감지해서 무조건 업로드 처리
 			//$(document).on('change', "input[type='file']", function(e) {
+				var csrfHeaderName = "${_csrf.headerName}";
+				var csrfTokenValue = "${_csrf.token}";
 			$("input[type='file']").change(function(e) {
 				// 파일 업로드
 				// ajax 이용하는 경우에는 FormData 객체 이용 (form 태그와 같은 역할)
@@ -260,6 +279,9 @@
 					data : formData, // 전달할 데이터
 					type : 'POST',
 					dataType: 'json', // 데이터 타입: json
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+					},
 					success : function (result) {
 						alert('Uploaded');
 						console.log(result);
@@ -301,6 +323,29 @@
 				});
 				uploadResult.append(str); // 요소 추가 (<li> 추가)
 			} // showUploadedFile
+			
+			// 버튼 클릭시 삭제
+			$(".uploadResult").on("click", "button", function(e) {
+				alert("delete file");
+				
+				var targetFile = $(this).data("file");
+				var type = $(this).data("type");
+				var targetLi = $(this).closest("li");
+				
+				$.ajax({
+					url: '/deleteFile',
+					data: {fileName: targetFile, type: type},
+					dataType: 'text',
+					type: 'post',
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+					},
+					success: function(result) {
+						alert(result);
+						targetLi.remove(); // li 삭제
+					}
+				}); // $.ajax
+			}); // uploadResult
 			
 		});
 	</script>
